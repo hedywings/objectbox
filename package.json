@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/simenkid/objectbox/issues"
   },
-  "homepage": "https://github.com/simenkid/objectbox#readme"
+  "homepage": "https://github.com/simenkid/objectbox#readme",
+  "dependencies": {
+    "busyman": "0.0.2"
+  }
 }
