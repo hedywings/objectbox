@@ -18,5 +18,8 @@
   "homepage": "https://github.com/simenkid/objectbox#readme",
   "dependencies": {
     "busyman": "0.0.2"
+  },
+  "devDependencies": {
+    "should": "^8.3.1"
   }
 }
