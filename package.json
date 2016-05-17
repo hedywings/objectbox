@@ -1,6 +1,6 @@
 {
   "name": "objectbox",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "An object storage with persistence",
   "main": "index.js",
   "scripts": {
