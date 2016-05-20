@@ -1,6 +1,6 @@
 {
   "name": "objectbox",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An object storage with persistence",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/simenkid/objectbox.git"
+    "url": "git+https://github.com/hedywings/objectbox.git"
   },
-  "author": "Simen Li",
+  "author": "Hedy Wang <hedywings@gmail.com>",
+  "contributors": [
+    "Simen Li <simenkid@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/simenkid/objectbox/issues"
+    "url": "https://github.com/hedywings/objectbox/issues"
   },
-  "homepage": "https://github.com/simenkid/objectbox#readme",
+  "homepage": "https://github.com/hedywings/objectbox#readme",
   "dependencies": {
     "busyman": "0.0.2",
     "lodash": "^4.12.0",
