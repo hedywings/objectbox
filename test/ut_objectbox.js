@@ -152,14 +152,10 @@ describe('Constructor Check', function () {
         gadBox = new Storage(dbPath, 100);
         should(gadBox._count).be.eql(0);
         should(gadBox._maxNum).be.eql(100);
-        should(gadBox._maxIndex).be.eql(99);
         should(gadBox._box).be.Object();
         should(gadBox._db).be.instanceof(Db);
+        (function () { return new Storage(1, 10); }).should.throw();
     });
-});
-
-describe('Signature Check', function () {
-
 });
 
 describe('Functional Check', function () {
@@ -241,9 +237,9 @@ describe('Functional Check', function () {
 
     it('find()', function () {
         gadBox.find({_id: 1}).should.deepEqual(gad1);
-        gadBox.find({_dev: { _netcore: 'zigbee-core'}}).should.deepEqual(gad2);
+        gadBox.find({_dev: { _netcore: 'zigbee-core' }}).should.deepEqual(gad2);
         gadBox.find('_auxId').should.be.deepEqual(gad1);
-        gadBox.find(function(o) {return o._panel.class === 'power'; }).should.be.deepEqual(gad3);
+        gadBox.find(function(o) { return o._panel.class === 'power'; }).should.be.deepEqual(gad3);
         should(gadBox.find({_id: 5})).be.undefined();
     });
 
@@ -255,19 +251,19 @@ describe('Functional Check', function () {
         gadBox.exportAllObjs().should.be.deepEqual([gad1, gad2, gad3]);
     });
 
-    it('add - with id', function (done) {
+    it('add() - with id', function (done) {
         gadBox.add(gad1, function (err, id) {
             if (id === 1) done();
         });
     });
 
-    it('add - no dump()', function (done) {
+    it('add() - no dump()', function (done) {
         gadBox.add(gadInfo4, function (err, id) {
             if (id === 4) done();
         });
     });
 
-    it('set - no dump()', function (done) {
+    it('set() - no dump()', function (done) {
         gadBox.set(5, gadInfo5, function (err, id) {
             if (id === 5) done();
         });
@@ -309,20 +305,20 @@ describe('Functional Check', function () {
         });
     });
 
-    it('modify()', function (done) {
+    it('modify() - find nothing', function (done) {
         gadBox.modify(3, 'props', {name: 'gad33', description: 'hello'}, function (err, result) {
             if (_.isEqual(result, {description: 'hello'})) done();
         });
     });
 
-    it('modify()', function (done) {
+    it('modify() - find nothing', function (done) {
         gadBox.modify(3, 'props', {namee: 'gad3', description: 'hello'}, function (err, result) {
             if (err) done();
         });
     });
 
-    it('modify()', function (done) {
-        gadBox.modify(3, 'propss', {namee: 'gad3', description: 'hello'}, function (err, result) {
+    it('modify() - find nothing', function (done) {
+        gadBox.modify(3, 'propss', {name: 'gad3', description: 'hello'}, function (err, result) {
             if (err) done();
         });
     });

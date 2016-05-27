@@ -62,8 +62,9 @@ var nc1 = {
 
 describe('Constructor Check', function () {
     it('new Db()', function () {
-        db = new Db('/home/hedy/projects/objectbox/lib/database/objectbox.db');
+        db = new Db(dbPath);
         (db._db).should.instanceof(DataStore);
+        (function () { return new Db(10); }).should.throw();
     });
 });
 
@@ -158,13 +159,13 @@ describe('Find By Id Check', function () {
 });
 
 describe('Modify Check', function () {
-    it('modify id', function (done) {
+    it('modify() id', function (done) {
         db.modify(1, 'id', 5, function (err) {
             if (err) done();
         });
     });
 
-    it('modify id', function (done) {
+    it('modify() id', function (done) {
         db.modify(1, 'id', { x: 10 }, function (err) {
             if (err) done();
         });
@@ -200,20 +201,26 @@ describe('Modify Check', function () {
         });
     });
 
-    it('modify()', function (done) {
+    it('modify() - find nothing', function (done) {
         db.modify(1, 'traffic.in', { hitss: 1 }, function (err) {
             if (err) done();
         });
     });
 
-    it('modify()', function (done) {
+    it('modify() - find nothing', function (done) {
         db.modify(1, 'traffic', { hits: 1 }, function (err) {
             if (err) done();
         });
     });
 
-    it('modify()', function (done) {
+    it('modify() - find nothing', function (done) {
         db.modify(1, 'Xtraffic', { hits: 1 }, function (err) {
+            if (err) done();
+        });
+    });
+
+    it('modify() - find nothing', function (done) {
+        db.modify(5, 'traffic.in', { hits: 1 }, function (err) {
             if (err) done();
         });
     });
@@ -274,26 +281,26 @@ describe('Replace Check', function () {
         });
     });
 
-    it('replace - find nothing', function (done) {
+    it('replace() - find nothing', function (done) {
         db.replace(5, 'traffic.in.hits', 10, function (err) {
             if (err) done();
         });
     });
 
-    it('replace - find nothing', function (done) {
+    it('replace() - find nothing', function (done) {
         db.replace(1, 'traffic.in.hitss', 10, function (err) {
             if (err) done();
         });
     });
 
-    it('replace - find nothing', function (done) {
+    it('replace() - find nothing', function (done) {
         db.replace(1, 'trafficc.in.hitss', 10, function (err) {
             if (err) done();
         });
     });
 });
 
-describe('Find', function () {
+describe('Find Check', function () {
     it('find()', function (done) {
         db.find({id: 3, name: 'nc3'}, function (err, docs) {
             delete docs[0]._id;
@@ -311,7 +318,7 @@ describe('Find All Check', function () {
 });
 
 describe('Remove By Id Check', function () {
-    it('remove()', function (done) {
+    it('removeById()', function (done) {
         db.removeById(1, function () {
             db.findById(1, function(err, doc) {
                 if (_.isNull(doc)) done();
