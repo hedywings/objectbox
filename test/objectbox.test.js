@@ -1,6 +1,5 @@
 var _ = require('lodash'),
     expect = require('chai').expect,
-    should = require('should'),
     fs = require('fs'),
     Db = require('../lib/db'),
     Storage = require('../lib/objectbox');
@@ -151,10 +150,10 @@ gad1.dump = gad2.dump = gad3.dump = function () {
 describe('Constructor Check', function () {
     it('new Storage()', function () {
         gadBox = new Storage(dbPath, 100);
-        should(gadBox._count).be.eql(0);
-        should(gadBox._maxNum).be.eql(100);
-        should(gadBox._box).be.Object();
-        should(gadBox._db).be.instanceof(Db);
+        expect(gadBox._count).to.be.equal(0);
+        expect(gadBox._maxNum).to.be.equal(100);
+        expect(gadBox._box).to.be.Object;
+        expect(gadBox._db).to.be.instanceof(Db);
         expect(function () { return new Storage(1, 10); }).to.throw();
     });
 });
@@ -173,11 +172,11 @@ describe('Functional Check', function () {
     });
 
     it('getCount() - empty', function () {
-        gadBox.getCount().should.be.eql(0);
+        expect(gadBox.getCount()).to.be.equal(0);
     });
 
     it('getMaxNum()', function () {
-        gadBox.getMaxNum().should.be.eql(100);
+        expect(gadBox.getMaxNum()).to.be.eql(100);
     });
 
     it('set()', function (done) {
@@ -214,42 +213,42 @@ describe('Functional Check', function () {
     });
 
     it('isEmpty()', function () {
-        gadBox.isEmpty().should.be.false();
+        expect(gadBox.isEmpty()).to.be.false;
     });
 
     it('has()', function () {
-        gadBox.has(1).should.be.true();
+        expect(gadBox.has(1)).to.be.true;
     });
 
     it('get()', function () {
-        should(gadBox.get(1)).be.deepEqual(gad1);
+        expect(gadBox.get(1)).to.be.deep.equal(gad1);
     });
 
     it('getCount()', function () {
-        gadBox.getCount().should.be.eql(3);
+        expect(gadBox.getCount()).to.be.equal(3);
     });
 
     it('filter()', function () {
-        gadBox.filter('extra', null).should.be.deepEqual([gad1, gad2, gad3]);
-        gadBox.filter('_auxId', 3328).should.be.deepEqual([gad3]);
-        gadBox.filter('_id', 5).should.be.deepEqual([]);
-        gadBox.filter('_xxx', 5).should.be.deepEqual([]);
+        expect(gadBox.filter('extra', null)).to.be.deep.equal([gad1, gad2, gad3]);
+        expect(gadBox.filter('_auxId', 3328)).to.be.deep.equal([gad3]);
+        expect(gadBox.filter('_id', 5)).to.be.deep.equal([]);
+        expect(gadBox.filter('_xxx', 5)).to.be.deep.equal([]);
     });
 
     it('find()', function () {
-        gadBox.find({_id: 1}).should.deepEqual(gad1);
-        gadBox.find({_dev: { _netcore: 'zigbee-core' }}).should.deepEqual(gad2);
-        gadBox.find('_auxId').should.be.deepEqual(gad1);
-        gadBox.find(function(o) { return o._panel.class === 'power'; }).should.be.deepEqual(gad3);
-        should(gadBox.find({_id: 5})).be.undefined();
+        expect(gadBox.find({_id: 1})).to.be.deep.equal(gad1);
+        expect(gadBox.find({_dev: { _netcore: 'zigbee-core' }})).to.be.deep.equal(gad2);
+        expect(gadBox.find('_auxId')).to.be.deep.equal(gad1);
+        expect(gadBox.find(function(o) { return o._panel.class === 'power'; })).to.be.deep.equal(gad3);
+        expect(gadBox.find({_id: 5})).to.be.undefined;
     });
 
     it('exportAllIds()', function () {
-        gadBox.exportAllIds().should.be.deepEqual([1, 2, 3]);
+        expect(gadBox.exportAllIds()).to.be.deep.equal([1, 2, 3]);
     });
 
     it('exportAllObjs()', function () {
-        gadBox.exportAllObjs().should.be.deepEqual([gad1, gad2, gad3]);
+        expect(gadBox.exportAllObjs()).to.be.deep.equal([gad1, gad2, gad3]);
     });
 
     it('add() - with id', function (done) {
@@ -359,8 +358,8 @@ describe('Functional Check', function () {
     });
 
     it('removeElement()', function () {
-        gadBox.removeElement(10).should.be.false();
-        gadBox.removeElement(5).should.be.true();
+        expect(gadBox.removeElement(10)).to.be.false;
+        expect(gadBox.removeElement(5)).to.be.true;
     });
 
     it('remove() - with invalid id', function (done) {

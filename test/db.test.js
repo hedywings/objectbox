@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    should = require('should'),
+    expect = require('chai').expect,
     fs = require('fs'),
     DataStore = require('nedb'),
     Db = require('../lib/db');
@@ -63,8 +63,8 @@ var nc1 = {
 describe('Constructor Check', function () {
     it('new Db()', function () {
         db = new Db(dbPath);
-        (db._db).should.instanceof(DataStore);
-        (function () { return new Db(10); }).should.throw();
+        expect(db._db).to.be.instanceof(DataStore);
+        expect(function () { return new Db(10); }).to.throw();
     });
 });
 

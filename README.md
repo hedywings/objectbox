@@ -21,6 +21,7 @@ An object storage with persistence
 <a name="Overview"></a>
 ## 1. Overview
 
+The **objectbox** is a a dictionary used to store objects. When you add object to the box, it will assign an index id to the object, you can use this index id to access object in the box. **objectbox** attached a database to permanently save your object data, default is using [NeDB](https://www.npmjs.com/package/nedb) datastore, or you can provide your datastore with requirement methods.
 
 <br />
 
@@ -34,9 +35,9 @@ An object storage with persistence
 <a name="Usage"></a>
 ## 3 Basic Usage
 
-**objectbox** exports its functionalities as a constructor. To use **objectbox**, just new an instance with `database` and `maxNum` from Objectbox class. The property `database` can be a database object or the path to the database, and the property `maxNum` indicates the maximum capacity of the box.
+**objectbox** exports its functionalities as a constructor. To use **objectbox**, just new an instance with property `database` and `maxNum` from Objectbox class. The property `database` can be a datastore object or the path to the to the file where the data is persisted, and the property `maxNum` indicates the maximum capacity of the box.
 
-Instance of **objectbox** is denoted as `box` in this document, and each object stored in `box` is denoted as `obj` in this document. 
+Instance of **objectbox** is denoted as `box` in this document, and each object stored in `box` is denoted as `object` in this document. 
 
 Here is an quick example of how to create an box instance.
 
@@ -154,7 +155,7 @@ Get object with specified id from the box
 
 **Returns**  
 
-- (*Object*): obj
+- (*Object*): object
 
 **Example**  
 
@@ -409,7 +410,7 @@ Store an object into the box with specified index id and permanently saved to th
 
 **Arguments**  
 
-1. `id` (*Number*): Specify index id of obj which you want to store.
+1. `id` (*Number*): Specify index id of object which you want to store.
 2. `obj` (*Object*): object need to be stored.
 3. `callback` (*Function*): `function (err, id) {}`. Get called when finish save.
 
@@ -435,7 +436,7 @@ var obj1 = {
         }
     }
 
-obj.set(1, obj1, function (err, id) {
+box.set(1, obj1, function (err, id) {
     if (err) {
         console.log(err)
     } else {
@@ -445,13 +446,13 @@ obj.set(1, obj1, function (err, id) {
     }
 });
 
-obj.set(2, obj2, function (err, id) {
+box.set(2, obj2, function (err, id) {
     if (err) {
         console.log(err)
     } else {
         // id equal to 2
         // obj2.info is stored into the database
-        obj1.id = id;
+        obj2.id = id;
     }
 });
 ```
