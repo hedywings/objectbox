@@ -1,6 +1,12 @@
 # objectbox
 An object storage with persistence
 
+[![NPM](https://nodei.co/npm/objectbox.png?downloads=true)](https://nodei.co/npm/objectbox/)  
+
+[![Travis branch](https://img.shields.io/travis/hedywings/objectbox/master.svg?maxAge=2592000)](https://travis-ci.org/hedywings/objectbox)
+[![npm](https://img.shields.io/npm/v/objectbox.svg?maxAge=2592000)](https://www.npmjs.com/package/objectbox)
+[![npm](https://img.shields.io/npm/l/objectbox.svg?maxAge=2592000)](https://www.npmjs.com/package/objectbox)
+
 ## Table of Contents
 
 1. [Overview](#Overview)    
