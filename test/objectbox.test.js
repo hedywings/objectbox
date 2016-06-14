@@ -1,10 +1,11 @@
 var _ = require('lodash'),
+    expect = require('chai').expect,
     should = require('should'),
     fs = require('fs'),
     Db = require('../lib/db'),
     Storage = require('../lib/objectbox');
 
-var dbPath = '../lib/database/objectbox.db',
+var dbPath = __dirname + '/../lib/database/objectbox.db',
     gadBox;
 
 fs.exists(dbPath, function (isThere) {
@@ -154,21 +155,21 @@ describe('Constructor Check', function () {
         should(gadBox._maxNum).be.eql(100);
         should(gadBox._box).be.Object();
         should(gadBox._db).be.instanceof(Db);
-        (function () { return new Storage(1, 10); }).should.throw();
+        expect(function () { return new Storage(1, 10); }).to.throw();
     });
 });
 
 describe('Functional Check', function () {
     it('isEmpty() - empty', function () {
-        gadBox.isEmpty().should.be.true();
+        expect(gadBox.isEmpty()).to.be.true;
     });
 
     it('has() - empty', function () {
-        gadBox.has(1).should.be.false();
+        expect(gadBox.has(1)).to.be.false;
     });
 
     it('get() - empty', function () {
-        should(gadBox.get(1)).be.undefined();
+        expect(gadBox.get(1)).to.be.undefined;
     });
 
     it('getCount() - empty', function () {

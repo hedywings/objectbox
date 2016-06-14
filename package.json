@@ -4,7 +4,7 @@
   "description": "An object storage with persistence",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test-all"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,8 @@
     "nedb": "^1.8.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
     "should": "^8.3.1"
   }
 }
