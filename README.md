@@ -81,7 +81,7 @@ Create a new instance of Objectbox class.
 
 **Arguments**  
 
-1. `database` (*Object* | *String*): [NeDB](https://www.npmjs.com/package/nedb) is the default datastore, and dafault path is `__dirname + '/database/objectbox.db'` to the file where the data is persisted. You can specify a a new path to store data, or you can also provide your datastore with methods list in following table. 
+1. `database` (*Object* | *String*): [NeDB](https://www.npmjs.com/package/nedb) is the default datastore, and dafault path is `__dirname + '/database/objectbox.db'` to the file where the data is persisted. You can specify a a new path to store data, or you can also provide your datastore with methods list in [db.md](https://github.com/hedywings/objectbox/blob/develop/db.md). 
 2. `maxNum` (*Number*): The maximum capacity of the box. Default is 65536.
 
 **Returns**  
@@ -212,7 +212,7 @@ Iterates over objects of box, returning the first object predicate returns truth
 
 **Arguments**  
 
-1. predicate (*Array* | *Function* | *Object* | *String*): The function invoked per iteration.
+1. `predicate` (*Array* | *Function* | *Object* | *String*): The function invoked per iteration.
 
 **Returns**  
 
@@ -254,12 +254,12 @@ box.add(user1, function(err) {
 <a name="API_findFromDb"></a>  
 ### .findFromDb(query, callback)  
 
-Look for stored object data matching you query from database.
+Look for stored object data matching your query from database.
 
 **Arguments**  
 
-1. query (*Object*): Query object. You can see more detail in [Finding documents](https://www.npmjs.com/package/nedb#finding-documents) if you are using default [nedb](https://www.npmjs.com/package/nedb) datastore.
-2. callback (*Function*): `function (err, docs) {}`. Get called when find completes.
+1. `query` (*Object*): Query object. You can see more detail in [Finding documents](https://www.npmjs.com/package/nedb#finding-documents) if you are using default [nedb](https://www.npmjs.com/package/nedb) datastore.
+2. `callback` (*Function*): `function (err, docs) {}`. Get called when find completes.
 
 **Returns**  
 
@@ -307,8 +307,8 @@ Iterates over object of box, returning an array of all object predicate returns 
 
 **Arguments** 
 
-1. path (*String* | *Function*): It can be path of object or predicate. 
-2. value (*Depend*): The value to filter.
+1. `path` (*String* | *Function*): It can be path of object or predicate. 
+2. `value` (*Depend*): The value to filter.
 
 **Returns**  
 
@@ -498,7 +498,7 @@ Remove an object with specified id from box.
 
 **Arguments**  
 
-1. id (*Number*): Object id.
+1. `id` (*Number*): Object id.
 
 **Returns** 
 
@@ -527,8 +527,8 @@ Remove an object with specified id from box and clear data record from the datab
 
 **Arguments**  
 
-1. id (*Number*): Object id.
-2. callback (*Function*): `function (err, id) {}`. Get called when remove complete.
+1. `id` (*Number*): Object id.
+2. `callback` (*Function*): `function (err, id) {}`. Get called when remove complete.
 
 **Returns** 
 
@@ -554,10 +554,10 @@ Modify object snippet from database with given path.
 
 **Arguments**  
 
-1. id (*Number*): Object id.
-2. path (*String*): The path of the property to modify.
-3. snippet (*Depends*): The snippet to modify.
-4. callback (*Function*): `function (err, diffSnippet) {}`. Get called when midify success.
+1. `id` (*Number*): Object id.
+2. `path` (*String*): The path of the property to modify.
+3. `snippet` (*Depends*): The snippet to modify.
+4. `callback` (*Function*): `function (err, diffSnippet) {}`. Get called when midify success.
 
 **Returns**  
 
@@ -645,10 +645,10 @@ Replace Object value from database with given path.
 
 **Arguments**  
 
-1. id (*Number*): Object id.
-2. path (*String*): The path of the property to replace.
-3. value (*Depends*): The value to replace.
-4. callback (*Function*): `function (err, numReplaced) {}`. Get called when midify success.
+1. `id` (*Number*): Object id.
+2. `path` (*String*): The path of the property to replace.
+3. `value` (*Depends*): The value to replace.
+4. `callback` (*Function*): `function (err, numReplaced) {}`. Get called when midify success.
 
 **Returns**  
 
@@ -747,7 +747,7 @@ Maintain object data between box and database. If object is not exist in box, it
 
 **Arguments**  
 
-1. callback (*Function*): Get called when maintain is completed.
+1. `callback` (*Function*): Get called when maintain is completed.
 
 **Returns**  
 
@@ -768,6 +768,9 @@ box.maintain(function (err) {
 <a name="Contributors"></a>
 ## 5 Contributors
 
+* [Hedy Wang](https://www.npmjs.com/~hedywings)  
+* [Simen Li](https://www.npmjs.com/~simenkid)
+* [Peter Yi](https://www.npmjs.com/~petereb9)
 
 <br />
 

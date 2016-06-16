@@ -66,7 +66,7 @@ db.insert(userIndo, function (err, newDoc) {
     } else {
         console.log(newDoc);
     }
-})
+});
 ```
 
 *************************************************
@@ -77,7 +77,8 @@ Remove a data with given id from database.
 
 **Arguments**  
 
-1.
+1. `id` (*Number*): Object id. Each object stored in database has id property. 
+2. `callback` (*Function*): `function (err, newDoc) {}`. Get called when remove data from database.
 
 **Returns**  
 
@@ -86,17 +87,25 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
-
+db.removeById(0, function (err, numRemoved) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(numRemoved);
+    }
+});
 ```
 
 *************************************************
 <a name="API_findById"></a>  
-### .findById()  
+### .findById(id, callback)  
 
-
+Find a data with given id from database.
 
 **Arguments**  
 
+1. `id` (*Number*): Object id.
+2. `callback` (*Function*): `function (err, newDoc) {}`. Get called when find data from database.
 
 **Returns**  
 
@@ -105,17 +114,27 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
-
+db.findById(0, function (err, doc) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(doc);
+    }
+});
 ```
 
 *************************************************
 <a name="API_modify"></a>  
-### .modify()  
+### .modify(id, path, snippet, callback)  
 
-
+Modify object snippet from database with given path.
 
 **Arguments**  
 
+1. `id` (*Number*): Object id.
+2. `path` (*String*): The path of the property to modify.
+3. `snippet` (*Depends*): The snippet to modify.
+4. `callback` (*Function*): `function (err, diffSnippet) {}`. Get called when midify success.
 
 **Returns**  
 
@@ -124,17 +143,90 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
+var obj = {
+		id: 5,
+        x: 'hi',
+        y: 11,
+        z: {
+            z1: 'hello',
+            z2: false,
+            z3: 0
+        }
+    };
 
+db.insert(obj, function (err) {
+    if (err)
+        console.log(err);
+    else {
+        db.modify(obj.id, 'x', 'hello', function (err, diffSnippet) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(diffSnippet);
+                // diffSnippet equal to { x: 'hello' }
+                // object data in database is equal to 
+                // {
+                //     x: 'hello',
+                //     y: 11,
+                //     z: {
+                //         z1: 'hello',
+                //         z2: true,
+                //         z3: 0
+                //     }
+                // }
+            }
+        });
+
+        db.modify(obj.id, 'z.z2', true, function (err, diffSnippet) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(diffSnippet);
+                // diffSnippet equal to { z: { z2: true }}
+                // object data in database is equal to 
+                // {
+                //     x: 'hi',
+                //     y: 11,
+                //     z: {
+                //         z1: 'hello',
+                //         z2: true,
+                //         z3: 0
+                //     }
+                // }
+            }
+        });
+
+        db.modify(obj.id, 'z.z4', 1, function (err, diffSnippet) {
+            // If the path of object does not exist, an error will occur.
+            if (err) {
+                console.log(err);
+                // err equal to [Error: No such property z.z4 to modify.]
+            }
+        });
+
+        db.modify(obj.id, 'z', { z11: 'hi', z2: true }, function (err, diffSnippet) {
+            // Value of property 'z' does not have 'z11' property, so an error will occur.
+            if (err) {
+                console.log(err);
+                // err equal to [Error: No such property z.z11 to modify.]
+            }
+        });
+    }
+});
 ```
 
 *************************************************
 <a name="API_replace"></a>  
 ### .replace()  
 
-
+Replace Object value from database with given path.
 
 **Arguments**  
 
+1. `id` (*Number*): Object id.
+2. `path` (*String*): The path of the property to replace.
+3. `value` (*Depends*): The value to replace.
+4. `callback` (*Function*): `function (err, numReplaced) {}`. Get called when midify success.
 
 **Returns**  
 
@@ -143,17 +235,98 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
+var obj = {
+		id: 6,
+        x: 'hi',
+        y: 11,
+        z: {
+            z1: 'hello',
+            z2: false,
+            z3: 0
+        }
+    };
 
+db.insert(obj, function (err) {
+    if (err)
+        console.log(err);
+    else {
+        db.replace(obj.id, 'x', 'hello', function (err, numReplaced) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(numReplaced);
+                // numReplaced equal to 1
+                // object data in database is equal to 
+                // {
+                //     x: 'hello',
+                //     y: 11,
+                //     z: {
+                //         z1: 'hello',
+                //         z2: true,
+                //         z3: 0
+                //     }
+                // }
+            }
+        });
+
+        db.replace(obj.id, 'z.z2', true, function (err, numReplaced) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(numReplaced);
+                // numReplaced equal to 1
+                // object data in database is equal to 
+                // {
+                //     x: 'hi',
+                //     y: 11,
+                //     z: {
+                //         z1: 'hello',
+                //         z2: true,
+                //         z3: 0
+                //     }
+                // }
+            }
+        });
+
+        db.replace(obj.id, 'z.z4', 1, function (err, numReplaced) {
+            // If the path of object does not exist, an error will occur.
+            if (err) {
+                console.log(err);
+                // err equal to [Error: No such property z.z4 to modify.]
+            }
+        });
+
+        // 
+        db.replace(obj.id, 'z', { z11: 'hi', z2: true }, function (err, numReplaced) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(numReplaced);
+                // numReplaced equal to 1
+                // object data in database is equal to 
+                // {
+                //     x: 'hi',
+                //     y: 11,
+                //     z: {
+                //         z11: 'hi',
+                //         z2: true
+                //     }
+                // }
+            }
+        });
+    }
+});
 ```
 
 *************************************************
 <a name="API_findAll"></a>  
-### .findAll()  
+### .findAll(callback)  
 
-
+Get all the data objects stored in database.
 
 **Arguments**  
 
+1. `callback` (*Function*): `function (err, docs) { }.` Get called with all data.
 
 **Returns**  
 
@@ -162,17 +335,25 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
-
+db.find(function (err, docs) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(docs)
+	}
+});
 ```
 
 *************************************************
 <a name="API_find"></a>  
-### .find()  
+### .find(query, callback)  
 
-
+It is a wrapped function of [find()](https://www.npmjs.com/package/nedb#finding-documents) method of [NeDB](https://www.npmjs.com/package/nedb).
 
 **Arguments**  
 
+1. `query` (*Object*): The query object.
+2. `callback` (*Function*): `function (err, docs) {}.` Get called when find query docs.
 
 **Returns**  
 
@@ -181,5 +362,11 @@ Remove a data with given id from database.
 **Example**  
 
 ```js
-
+db.find({ system: 'solar' }, function (err, docs) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(docs);
+	}
+});
 ```
