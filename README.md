@@ -81,7 +81,7 @@ Create a new instance of Objectbox class.
 
 **Arguments**  
 
-1. `database` (*Object* | *String*): [NeDB](https://www.npmjs.com/package/nedb) is the default datastore, and dafault path is `__dirname + '/database/objectbox.db'` to the file where the data is persisted. You can specify a a new path to store data, or you can also provide your datastore with methods list in [db.md](https://github.com/hedywings/objectbox/blob/develop/db.md). 
+1. `database` (*Object* | *String*): [NeDB](https://www.npmjs.com/package/nedb) is the default datastore, and dafault path is `__dirname + '/database/objectbox.db'` to the file where the data is persisted. You can specify a a new path to store data, or you can also provide your datastore with methods list in [db.md](https://github.com/hedywings/objectbox/blob/master/db.md). 
 2. `maxNum` (*Number*): The maximum capacity of the box. Default is 65536.
 
 **Returns**  
