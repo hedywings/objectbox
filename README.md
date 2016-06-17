@@ -1,5 +1,5 @@
 # objectbox
-An object storage with persistence
+An object storage with persistence.  
 
 [![NPM](https://nodei.co/npm/objectbox.png?downloads=true)](https://nodei.co/npm/objectbox/)  
 
@@ -21,7 +21,7 @@ An object storage with persistence
 <a name="Overview"></a>
 ## 1. Overview
 
-The **objectbox** is a a dictionary used to store objects. When you add object to the box, it will assign an index id to the object, you can use this index id to access object in the box. **objectbox** attached a database to permanently save your object data, default is using [NeDB](https://www.npmjs.com/package/nedb) datastore, or you can provide your datastore with requirement methods.
+**objectbox** is a dictionary to maintain objects with persistence. **objectbox** will give you an unique numeric id when your object is added to the dictionary successfully. You can then use this id to find out the object from the box. **objectbox** uses [NeDB](https://www.npmjs.com/package/nedb) datastore to permanently keep your objects, database is just there by default. If you don't like NeDB, **objectbox** allows you to use your own persistence facility as the datastore for the objects.  
 
 <br />
 
@@ -35,11 +35,11 @@ The **objectbox** is a a dictionary used to store objects. When you add object t
 <a name="Usage"></a>
 ## 3 Basic Usage
 
-**objectbox** exports its functionalities as a constructor. To use **objectbox**, just new an instance with property `database` and `maxNum` from Objectbox class. The property `database` can be a datastore object or the path to the to the file where the data is persisted, and the property `maxNum` indicates the maximum capacity of the box.
+**objectbox** exports its functionalities as a constructor (Objectbox Class). To create a box, just new an instance from the Objectbox class with input arguments of `database` and `maxNum`. The parameter `database` is the file path to tell NeDB of where should your data persist. If you like to use your own database, just let `database` be your datastore object. The parameter `maxNum` is optional, you can use it to set the capacity of your box.  
 
-Instance of **objectbox** is denoted as `box` in this document, and each object stored in `box` is denoted as `object` in this document. 
+Instance of the Objectbox class will be denoted as **_box_** in this document, and each object stored in box will be denoted as **_obj_** in this document.  
 
-Here is an quick example of how to create an box instance.
+Here is an quick example of how to create a box.  
 
 ```js
 var Objectbox = require('objectbox'),
@@ -77,7 +77,7 @@ var Objectbox = require('objectbox'),
 <a name="API_Objectbox"></a>  
 ### new Objectbox([database][, maxNum])  
 
-Create a new instance of Objectbox class.
+Create a new instance of Objectbox class.  
 
 **Arguments**  
 
@@ -101,7 +101,7 @@ var box = new Objectbox(boxPath, 1000);
 <a name="API_isEmpty"></a>  
 ### .isEmpty()  
 
-Check box is empty or not.
+Checks if the box is empty.  
 
 **Arguments**  
 
@@ -109,37 +109,36 @@ Check box is empty or not.
 
 **Returns**  
 
-- (*Boolean*): Indicate the box is empty or not.
+- (*Boolean*): Returns `true` if box is empty, otherwise `false`.
 
 **Example**  
 
 ```js
-if (box.isEmpty()) {
+if (box.isEmpty())
     console.log('There is nothing in the box now.')
-} else {
-    console.log('There ar some objects in the box.')
-}
+else
+    console.log('There are some objects in the box.')
 ```
 
 *************************************************
 <a name="API_has"></a>  
 ### .has(id)  
 
-Check if object with specified id is in the box.
+Checks if there is an obj with the given id in the box .  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
+1. `id` (*Number*): id.  
 
 **Returns**  
 
-- (*Boolean*): The box has object with specified id or not.
+- (*Boolean*): Returns `true` if there is an obj positioned with the given id, otherwise `false`.  
 
 **Example**  
 
 ```js
 if (box.has(3)) {
-    console.log('object with id 3 is in the box');
+    console.log('There is an obj positioned with id 3 in the box');
 }
 ```
 
@@ -147,15 +146,15 @@ if (box.has(3)) {
 <a name="API_get"></a>  
 ### .get(id)  
 
-Get object with specified id from the box
+Get an obj from the box with the given id.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
+1. `id` (*Number*): id.  
 
 **Returns**  
 
-- (*Object*): object
+- (*Object*): Returns the obj if found, otherwise `undefined`.  
 
 **Example**  
 
@@ -167,7 +166,7 @@ var obj = box.get(5);
 <a name="API_getMaxNum"></a>  
 ### .getMaxNum()  
 
-Get maximum capacity of the box. 
+Get the maximum number of objs that this box can hold.  
 
 **Arguments**  
 
@@ -175,12 +174,12 @@ Get maximum capacity of the box.
 
 **Returns**  
 
-- (*Number*): Maximum number of box.
+- (*Number*): Maximum number of objs this box can hold.  
 
 **Example**  
 
 ```js
-var maxNum = box.getMaxNum();
+var maxNum = box.getMaxNum();   // 1000
 ```
 
 
@@ -188,7 +187,7 @@ var maxNum = box.getMaxNum();
 <a name="API_getCount"></a>  
 ### .getCount()  
 
-Get the number of objects stored in box.
+Get the current number of objs stored in this box.  
 
 **Arguments** 
 
@@ -196,70 +195,60 @@ Get the number of objects stored in box.
 
 **Returns**  
 
-- (*Number*): Number of objects.
+- (*Number*): Current number of objs in the box.  
 
 **Example**  
 
 ```js
-var count = box.getCount();
+var count = box.getCount(); // 32
 ```
 
 *************************************************
 <a name="API_find"></a> 
 ### .find(predicate)  
 
-Iterates over objects of box, returning the first object predicate returns truthy for.
+Iterates over objs in this box, and returns the first obj `predicate` returns truthy for.  
 
 **Arguments**  
 
-1. `predicate` (*Array* | *Function* | *Object* | *String*): The function invoked per iteration.
+1. `predicate` (*Array* | *Function* | *Object* | *String*): The function invoked per iteration.  
 
 **Returns**  
 
-- (*Object*): The matched object 
+- (*Object*): Returns the matched obj, otherwise `undefined` if not found.  
 
 **Example**  
 
 ```js
-var user1 = { 'user': 'barney',  'age': 36, 'active': true },
-    user2 = { 'user': 'fred',    'age': 40, 'active': false };
+// assume that the following two objs has been stored in the box:
+// user1 = { user: 'barney', age: 36, active: true }
+// user2 = { user: 'fred', age: 40, active: false }
 
-box.add(user1, function(err) {
-    if (err) 
-        console.log(err);
-    else
-        box.add(user2, function(err) {
-            if (err)
-                console.log(err);
-            else {
-                // return user1
-                box.find(function(obj) {
-                    return obj.age < 40;
-                });
-
-                // return user1
-                box.find({ 'age': 36, 'active': true });
-
-                // return user2
-                box.find(['active', false]);
-
-                // return user1
-                box.find('active');
-            }
-        });
+box.find(function(obj) {        // returns user1
+    return obj.age < 40;
 });
+
+//********************************************************
+// [TODO] busyman doesn't support these styles of finding
+box.find({                      // returns user1
+    age: 36, 
+    active: true
+});    
+box.find([ 'active', false ]);  // returns user2
+box.find('active');             // returns user1
+//********************************************************
 ```
 
 *************************************************
 <a name="API_findFromDb"></a>  
 ### .findFromDb(query, callback)  
 
-Look for stored object data matching your query from database.
+Looks for stored objs that matched the `query` from persistence.  
 
 **Arguments**  
 
-1. `query` (*Object*): Query object. You can see more detail in [Finding documents](https://www.npmjs.com/package/nedb#finding-documents) if you are using default [nedb](https://www.npmjs.com/package/nedb) datastore.
-2. `callback` (*Function*): `function (err, docs) {}`. Get called when find completes.
+1. `query` (*Object*): Query object. Please go to [Finding documents](https://www.npmjs.com/package/nedb#finding-documents) for more details if you are using the default [NeDB](https://www.npmjs.com/package/nedb) datastore.  
+2. `callback` (*Function*): `function (err, docs) {}`. Get called when finding completes.  
 
 **Returns**  
 
@@ -268,34 +257,23 @@ Look for stored object data matching your query from database.
 **Example** 
 
 ```js
-var obj1 = { 
-        a: '1',
-        b: 2,
-        same: 'hi'
-    },
-    obj2 = { 
-        x: 0,
-        y: 1,
-        same: 'hi'
-    };
+// assume that the following two objs has been stored in the box:
+// obj1 = { a: '1', b: 2, same: 'hi' }
+// obj2 = { x: 0, y: 1, same: 'hi' }
 
-box.add(obj1, function(err, id1) {
-    box.add(obj2, function(err, id2) {
-        box.findFromDb({ a: '1' }, function (err, docs) {
-            // docs equal to [ obj1 ]
-            console.log(docs);
-        });
+box.findFromDb({ a: '1' }, function (err, docs) {
+    // docs will be an array of [ obj1 ]
+    console.log(docs);
+});
 
-        box.findFromDb({ x: 0 }, function (err, docs) {
-            // docs equal to [ obj2 ]
-            console.log(docs);
-        });
+box.findFromDb({ x: 0 }, function (err, docs) {
+    // docs will be an array of [ obj2 ]
+    console.log(docs);
+});
 
-        box.findFromDb({ same: 'hi' }, function (err, docs) {
-            // docs equal to [ obj1, obj2 ]
-            console.log(docs);
-        });
-    });
+box.findFromDb({ same: 'hi' }, function (err, docs) {
+    // docs will be an array of [ obj1, obj2 ]
+    console.log(docs);
 });
 ``` 
 
@@ -303,48 +281,36 @@ box.add(obj1, function(err, id1) {
 <a name="API_filter"></a>  
 ### .filter(path[, value])  
 
-Iterates over object of box, returning an array of all object predicate returns truthy for.
+Iterates over objs in box, and returns an array of objs that `predicate` returns truthy for.  
 
 **Arguments** 
 
-1. `path` (*String* | *Function*): It can be path of object or predicate. 
-2. `value` (*Depend*): The value to filter.
+1. `path` (*String* | *Function*): It can be a direct path of an obj property or a `predicate` function.  
+2. `value` (*Depend*): The value to equality check in filtering. This value should be given if `path` is a string of the direct path to obj propertty.  
 
 **Returns**  
 
-- (*Array*): Return the filtered array
+- (*Array*): Returns the filtered array.  
 
 **Example**  
 
 ```js
-var user1 = { 'user': 'barney',  'age': 36, 'active': true },
-    user2 = { 'user': 'fred',    'age': 40, 'active': true };
+// assume that the following two objs has been stored in the box:
+// user1 = { user: 'barney', age: 36, active: true }
+// user2 = { user: 'fred', age: 40, active: true }
 
-box.add(user1, function(err) {
-    if (err) 
-        console.log(err);
-    else
-        box.add(user2, function(err) {
-            if (err)
-                console.log(err);
-            else {
-                // return [ user1 ]
-                box.filter(function(obj) {
-                    return obj.age < 40;
-                });
-
-                // return [ user1, user2 ]
-                box.filter('active', true);
-            }
-        });
+box.filter(function(obj) {  // returns [ user1 ]
+    return obj.age < 40;
 });
+
+box.filter('active', true); // returns [ user1, user2 ]
 ```
 
 *************************************************
 <a name="API_exportAllIds"></a>  
 ### .exportAllIds()  
 
-Export all id of objects which stored in box.
+Export all id of objs stored in this box.  
 
 **Arguments**  
 
@@ -352,30 +318,23 @@ Export all id of objects which stored in box.
 
 **Returns**  
 
-- (*Array*): Array of ids.
+- (*Array*): Array of ids.  
 
 **Example**  
 
 ```js
-var obj1 = { a: '1' },
-    obj2 = { b: 2 },
-    ids;
+// assume that there are only the following two objs stored in the box:
+// obj1 = { a: '1' }, assume that its id is 0
+// obj2 = { b: 2 }, assume that its id is 1
 
-box.add(obj1, function(err, id1) {
-    box.add(obj2, function(err, id2) {
-        ids = box.exportAllObjs();
-
-        console.log(ids);
-        // equal to [id1, id2]
-    });
-});
+box.exportAllObjs();    // [ 0, 1 ]
 ```
 
 *************************************************
 <a name="API_exportAllObjs"></a>  
 ### .exportAllObjs()  
 
-Export all objects stored in box
+Export all objs stored in the box.  
 
 **Arguments** 
 
@@ -388,31 +347,24 @@ Export all objects stored in box
 **Example**  
 
 ```js
-var obj1 = { a: '1' },
-    obj2 = { b: 2 },
-    objs;
+// assume that there are only the following two objs stored in the box:
+// obj1 = { a: '1' }, assume that its id is 0
+// obj2 = { b: 2 }, assume that its id is 1
 
-box.add(obj1, function(err, id1) {
-    box.add(obj2, function(err, id2) {
-        objs = box.exportAllObjs();
-
-        console.log(objs);
-        // equal to [obj1, obj2]
-    });
-});
+box.exportAllObjs();    // [ { a: '1' }, { b: 2 } ]
 ```
 
 *************************************************
 <a name="API_set"></a>  
 ### .set(id, obj, callback)  
 
-Store an object into the box with specified index id and permanently saved to the database. You can add a dump() method in your object to export the data you want to store in database, or object will be stored to database.
+Store an obj into this box with a specified id. If `obj` has a synchronous `dump()` method, the box will invoke it to get the returned data which will be stored in database. This leaves you an opportunity to decide what kind of data you'd like to store in database. If `obj` does not has a `dump()` method, it will be stringified by NeDB and be stored in database.  
 
 **Arguments**  
 
-1. `id` (*Number*): Specify index id of object which you want to store.
-2. `obj` (*Object*): object need to be stored.
-3. `callback` (*Function*): `function (err, id) {}`. Get called when finish save.
+1. `id` (*Number*): The id specified for which obj you'd like to store.  
+2. `obj` (*Object*): obj to be stored.  
+3. `callback` (*Function*): `function (err, id) {}`. Get called after stored. Error occurs if id conflicts.  
 
 **Returns** 
 
@@ -422,15 +374,17 @@ Store an object into the box with specified index id and permanently saved to th
 
 ```js
 var obj1 = {
+        id: null,
         x: 0,
         y: 1,
         z: 2
     },
     obj2 = {
+        id: null,
         a: 0,
         b: 1,
         c: 2,
-        info: [0, 1, 2]
+        info: { name: 'obj2', props: [ 'a', 'b', 'c' ] }
         dump: function () {
             return this.info;
         }
@@ -440,9 +394,8 @@ box.set(1, obj1, function (err, id) {
     if (err) {
         console.log(err)
     } else {
-        // id equal to 1
-        // obj1 is stored into the database
-        obj1.id = id;
+        // id equals to 1, and obj1 will be stored to database
+        obj1.id = id;   // you can assign the got id to obj1 for it to track where itself is in the box  
     }
 });
 
@@ -450,8 +403,7 @@ box.set(2, obj2, function (err, id) {
     if (err) {
         console.log(err)
     } else {
-        // id equal to 2
-        // obj2.info is stored into the database
+        // id equals to 2, and obj2.dump() output will be stored to database
         obj2.id = id;
     }
 });
@@ -461,12 +413,15 @@ box.set(2, obj2, function (err, id) {
 <a name="API_add"></a>  
 ### .add(obj, callback)  
 
-Store an object into the box and permanently saved to the database. If successful storage, box will assign an index ID to the stored object. You can add a dump() method in your object to export the data you want to store in database, or object will be stored to database.
+Store an obj to the box. If `obj` has a synchronous `dump()` method, the box will invoke it to get the returned data which will be stored in database. This leaves you an opportunity to decide what kind of data you'd like to store in database. If `obj` does not has a `dump()` method, it will be stringified by NeDB and be stored in database.  
+
+If `obj.dump()` output data or `obj` itself has an property `id`, the box will try to store the `obj` with its intrinsic id. Otherwise, the box will return a new id for this newly stored `obj`.  
+   
 
 **Arguments** 
 
-1. `obj` (*Object*): object need to be stored.
-2. `callback` (*Function*): `function (err, id) {}`. Get called when finish save.
+1. `obj` (*Object*): obj to store.  
+2. `callback` (*Function*): `function (err, id) {}`. Get called when stored. Error occurs if the box if full or id conflicts.  
 
 **Returns**  
 
@@ -482,11 +437,10 @@ var obj = {
     };
 
 obj.add(obj, function (err, id) {
-    if (err) {
+    if (err)
         console.log(err)
-    } else {
+    else
         obj.id = id;
-    }
 });
 ```
 
@@ -494,41 +448,39 @@ obj.add(obj, function (err, id) {
 <a name="API_removeElement"></a>  
 ### .removeElement(id)  
 
-Remove an object with specified id from box.
+Remove an obj with the specified id from box, but keeps its data in database.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
+1. `id` (*Number*): id.  
 
 **Returns** 
 
-- (*Boolean*): Remove success or not.
+- (*Boolean*): Returns `true` if successfully removed. Returns `false` if removal fails or there is nothing to be removed (no obj positioned at given `id` in the dictinary).  
 
 **Example**  
 
 ```js
-var obj1 = { a: '1' };
+// assume that the following two obj has been stored in the box:
+// obj1 = { a: '1' }, and its id is 60
 
-box.add(obj1, function(err, id) {
-    var removed;
+if (box.removeElement(60))
+    console.log('Removal succeeds.');
 
-    removed = box.removeElement(id);
-    if (removed) {
-        console.log('Remove success.');
-    }
-});
+if (!box.removeElement(60))
+    console.log('Remove agagin, removal fails.');
 ```
 
 *************************************************
 <a name="API_remove"></a>  
 ### .remove(id, callback)  
 
-Remove an object with specified id from box and clear data record from the database.
+Remove an obj with specified id from box, and its record in database will also be deleted.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `callback` (*Function*): `function (err, id) {}`. Get called when remove complete.
+1. `id` (*Number*): id.  
+2. `callback` (*Function*): `function (err, id) {}`. Get called when removal completes. Error occurs if removal fails.  
 
 **Returns** 
 
@@ -538,11 +490,10 @@ Remove an object with specified id from box and clear data record from the datab
 
 ```js
 box.remove(3, function (err) {
-    if (err) {
+    if (err)
         console.log(err);
-    } else {
-        console.log('Remove success.');
-    }
+    else
+        console.log('Removal succeeds.');
 });
 ```
 
@@ -550,14 +501,14 @@ box.remove(3, function (err) {
 <a name="API_modify"></a>  
 ### .modify(id, path, snippet, callback)  
 
-Modify object snippet from database with given path.
+Modify a certain snippet of obj with the given direct path.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `path` (*String*): The path of the property to modify.
-3. `snippet` (*Depends*): The snippet to modify.
-4. `callback` (*Function*): `function (err, diffSnippet) {}`. Get called when midify success.
+1. `id` (*Number*): id.  
+2. `path` (*String*): Path of the snippet to modify.  
+3. `snippet` (*Depends*): The snippet to modify. If snippet is an object, the target will be partially updated.  
+4. `callback` (*Function*): `function (err, diffSnippet) {}`. Get called when modification succeeds.  
 
 **Returns**  
 
@@ -566,74 +517,57 @@ Modify object snippet from database with given path.
 **Example**  
 
 ```js
-var obj = {
-        x: 'hi',
-        y: 11,
-        z: {
-            z1: 'hello',
-            z2: false,
-            z3: 0
-        }
-    };
+// assume that the following two obj has been stored in the box:
+// obj = {
+//           x: 'hi', y: 11,
+//           z: { z1: 'hello', z2: false, z3: 0 }
+//       }
+// , and its id is 27
 
-box.add(obj, function (err, id) {
-    if (err)
+box.modify(27, 'x', 'hello', function (err, diffSnippet) {
+    if (err) {
         console.log(err);
-    else {
-        box.modify(id, 'x', 'hello', function (err, diffSnippet) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(diffSnippet);
-                // diffSnippet equal to { x: 'hello' }
-                // object data in database is equal to 
-                // {
-                //     x: 'hello',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
+    } else {
+        console.log(diffSnippet);
+        // diffSnippet equals to { x: 'hello' }
+        // object data in database is now updated to 
+        // {
+        //     x: 'hello',
+        //     y: 11,
+        //     z: {
+        //         z1: 'hello',
+        //         z2: true,
+        //         z3: 0
+        //     }
+        // }
+    }
 
-        box.modify(id, 'z.z2', true, function (err, diffSnippet) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(diffSnippet);
-                // diffSnippet equal to { z: { z2: true }}
-                // object data in database is equal to 
-                // {
-                //     x: 'hi',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
+    box.modify(id, 'z.z2', true, function (err, diffSnippet) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(diffSnippet);
+            // diffSnippet equals to { z: { z2: true }}
+            // object data in database is now updated to 
+            // {
+            //     x: 'hi',
+            //     y: 11,
+            //     z: {
+            //         z1: 'hello',
+            //         z2: true,
+            //         z3: 0
+            //     }
+            // }
+        }
 
         box.modify(id, 'z.z4', 1, function (err, diffSnippet) {
-            // If the path of object does not exist, an error will occur.
+            // If the path of obj does not exist, an error will occur.
             if (err) {
                 console.log(err);
                 // err equal to [Error: No such property z.z4 to modify.]
             }
         });
-
-        box.modify(id, 'z', { z11: 'hi', z2: true }, function (err, diffSnippet) {
-            // Value of property 'z' does not have 'z11' property, so an error will occur.
-            if (err) {
-                console.log(err);
-                // err equal to [Error: No such property z.z11 to modify.]
-            }
-        });
-    }
+    });
 });
 ```
 
@@ -641,14 +575,14 @@ box.add(obj, function (err, id) {
 <a name="API_replace"></a>  
 ### .replace(id, path, value, callback)  
 
-Replace Object value from database with given path.
+Replace a new value at the given direct path of obj.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `path` (*String*): The path of the property to replace.
-3. `value` (*Depends*): The value to replace.
-4. `callback` (*Function*): `function (err, numReplaced) {}`. Get called when midify success.
+1. `id` (*Number*): id.  
+2. `path` (*String*): Path of the property value to replace.  
+3. `value` (*Depends*): The value to replace.  
+4. `callback` (*Function*): `function (err, numReplaced) {}`. Get called when replacement succeeds.  
 
 **Returns**  
 
@@ -657,74 +591,64 @@ Replace Object value from database with given path.
 **Example**  
 
 ```js
-var obj = {
-        x: 'hi',
-        y: 11,
-        z: {
-            z1: 'hello',
-            z2: false,
-            z3: 0
-        }
-    };
+// assume that the following two obj has been stored in the box:
+// obj = {
+//           x: 'hi', y: 11,
+//           z: { z1: 'hello', z2: false, z3: 0 }
+//       }
+// , and its id is 27
 
-box.add(obj, function (err, id) {
-    if (err)
+box.replace(27, 'x', 'hello', function (err, numReplaced) {
+    if (err) {
         console.log(err);
-    else {
-        box.replace(id, 'x', 'hello', function (err, numReplaced) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
-                // {
-                //     x: 'hello',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
+    } else {
+        console.log(numReplaced);
+        // numReplaced equals to 1
+        // obj data in database is updated to 
+        // {
+        //     x: 'hello',
+        //     y: 11,
+        //     z: {
+        //         z1: 'hello',
+        //         z2: true,
+        //         z3: 0
+        //     }
+        // }
+    }
 
-        box.replace(id, 'z.z2', true, function (err, numReplaced) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
-                // {
-                //     x: 'hi',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
+    box.replace(27, 'z.z2', true, function (err, numReplaced) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(numReplaced);
+            // numReplaced equals to 1
+            // obj data in database is updated to 
+            // {
+            //     x: 'hi',
+            //     y: 11,
+            //     z: {
+            //         z1: 'hello',
+            //         z2: true,
+            //         z3: 0
+            //     }
+            // }
+        }
 
         box.replace(id, 'z.z4', 1, function (err, numReplaced) {
-            // If the path of object does not exist, an error will occur.
+            // If the path of obj does not exist, an error will occur.
             if (err) {
                 console.log(err);
                 // err equal to [Error: No such property z.z4 to modify.]
             }
         });
 
-        // 
         box.replace(id, 'z', { z11: 'hi', z2: true }, function (err, numReplaced) {
             if (err) {
                 console.log(err);
             } else {
                 console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
+                // numReplaced equals to 1
+                // obj data in database is updated to 
                 // {
                 //     x: 'hi',
                 //     y: 11,
@@ -735,7 +659,7 @@ box.add(obj, function (err, id) {
                 // }
             }
         });
-    }
+    });
 });
 ```
 
@@ -743,11 +667,11 @@ box.add(obj, function (err, id) {
 <a name="API_maintain"></a>  
 ### .maintain(callback)  
 
-Maintain object data between box and database. If object is not exist in box, it will be delete from database, and each object data in box will update to the database.
+Maintain and sync the obj data between box and database. At first, the box will check for those objs exist in database but not in box. Those objs found at this step will be deleted from database. Finally, each obj in box will dump itself to database again.  
 
 **Arguments**  
 
-1. `callback` (*Function*): Get called when maintain is completed.
+1. `callback` (*Function*): Get called when maintenance completes.  
 
 **Returns**  
 
@@ -762,15 +686,14 @@ box.maintain(function (err) {
 });
 ```
 
-
 <br />
 
 <a name="Contributors"></a>
 ## 5 Contributors
 
 * [Hedy Wang](https://www.npmjs.com/~hedywings)  
-* [Simen Li](https://www.npmjs.com/~simenkid)
-* [Peter Yi](https://www.npmjs.com/~petereb9)
+* [Simen Li](https://www.npmjs.com/~simenkid)  
+* [Peter Yi](https://www.npmjs.com/~petereb9)  
 
 <br />
 
