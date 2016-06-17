@@ -1,7 +1,13 @@
-Database
+# How to use your own database with objectbox
+
+<a name="Overview"></a>
+## Overview
+
+**objectbox** uses [NeDB](https://www.npmjs.com/package/nedb) datastore to permanently keep your objects. If you don't like NeDB, **objectbox** allows you to use your own persistence facility as the datastore for the objects, and **objectbox** requires some methods implemented on your own datastore.  
+
 
 <a name="APIs"></a>
-## APIs
+## Required methods on your datastore  
 
 * [Db()](#API_Db)
 * [db.insert()](#API_insert)
@@ -15,6 +21,8 @@ Database
 <br />
 
 *************************************************
+[TODO] user should give you a Constructor?  
+
 <a name="API_Db"></a>  
 ### new Db(fileName)  
 
@@ -38,335 +46,108 @@ var db = new Db(__dirname + '/database/data.db');
 <a name="API_insert"></a>  
 ### .insert(doc, callback)  
 
-Insert a data to the database. You have to determine if the data already exist in the database, and if so, use new data to update the data stored in database.
+Insert a document to the datastore. This method should make sure that if the document already exists in the datastore. If it does, use new document to update the old one.  
 
-**Note**: Each `doc` will be with the id property, and it is unique, so you can use the id property to determine whether data already exists.
+**Note**: Each `doc` has a property `id` which is unique in the box, you can use property `id` to determine whether data already exists.  
 
 **Arguments**  
 
-1. `doc` (*Object*): Data to be persisted.
-2. `callback` (*Function*): `function (err, newDoc) {}`. Get called when doc is insert to database.
+1. `doc` (*Object*): The document, which is an data object to be persisted.  
+2. `callback` (*Function*): `function (err, newDoc) {}`. This callback should be called when `doc` is inserted to datastore.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-var userIndo = {
-        id: 0,
-        name: 'barney',
-        age: 30
-    };
-
-db.insert(userIndo, function (err, newDoc) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(newDoc);
-    }
-});
-```
 
 *************************************************
 <a name="API_removeById"></a>  
 ### .removeById(id, callback)  
 
-Remove a data with given id from database.
+Remove a document from datastore by the given id.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id. Each object stored in database has id property. 
-2. `callback` (*Function*): `function (err, newDoc) {}`. Get called when remove data from database.
+1. `id` (*Number*): id.  
+2. `callback` (*Function*): `function (err, newDoc) {}`. Should be called when the document is removed from from datastore.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-db.removeById(0, function (err, numRemoved) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(numRemoved);
-    }
-});
-```
 
 *************************************************
 <a name="API_findById"></a>  
 ### .findById(id, callback)  
 
-Find a data with given id from database.
+Find a document from datastore by the given id.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `callback` (*Function*): `function (err, newDoc) {}`. Get called when find data from database.
+1. `id` (*Number*): id.  
+2. `callback` (*Function*): `function (err, newDoc) {}`. Should be called when finding completes.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-db.findById(0, function (err, doc) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(doc);
-    }
-});
-```
 
 *************************************************
 <a name="API_modify"></a>  
 ### .modify(id, path, snippet, callback)  
 
-Modify object snippet from database with given path.
+Modify a snippet in the document with the given path.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `path` (*String*): The path of the property to modify.
-3. `snippet` (*Depends*): The snippet to modify.
-4. `callback` (*Function*): `function (err, diffSnippet) {}`. Get called when midify success.
+1. `id` (*Number*): id.  
+2. `path` (*String*): Path of the property to modify.  
+3. `snippet` (*Depends*): The snippet to modify.  
+4. `callback` (*Function*): `function (err, diffSnippet) {}`. Should be called when modification completes.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-var obj = {
-		id: 5,
-        x: 'hi',
-        y: 11,
-        z: {
-            z1: 'hello',
-            z2: false,
-            z3: 0
-        }
-    };
-
-db.insert(obj, function (err) {
-    if (err)
-        console.log(err);
-    else {
-        db.modify(obj.id, 'x', 'hello', function (err, diffSnippet) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(diffSnippet);
-                // diffSnippet equal to { x: 'hello' }
-                // object data in database is equal to 
-                // {
-                //     x: 'hello',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
-
-        db.modify(obj.id, 'z.z2', true, function (err, diffSnippet) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(diffSnippet);
-                // diffSnippet equal to { z: { z2: true }}
-                // object data in database is equal to 
-                // {
-                //     x: 'hi',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
-
-        db.modify(obj.id, 'z.z4', 1, function (err, diffSnippet) {
-            // If the path of object does not exist, an error will occur.
-            if (err) {
-                console.log(err);
-                // err equal to [Error: No such property z.z4 to modify.]
-            }
-        });
-
-        db.modify(obj.id, 'z', { z11: 'hi', z2: true }, function (err, diffSnippet) {
-            // Value of property 'z' does not have 'z11' property, so an error will occur.
-            if (err) {
-                console.log(err);
-                // err equal to [Error: No such property z.z11 to modify.]
-            }
-        });
-    }
-});
-```
 
 *************************************************
 <a name="API_replace"></a>  
-### .replace()  
+### .replace(id, path, value, callback)  
 
-Replace Object value from database with given path.
+Replace a value in the document with the given path.  
 
 **Arguments**  
 
-1. `id` (*Number*): Object id.
-2. `path` (*String*): The path of the property to replace.
-3. `value` (*Depends*): The value to replace.
-4. `callback` (*Function*): `function (err, numReplaced) {}`. Get called when midify success.
+1. `id` (*Number*): id.  
+2. `path` (*String*): Path of the property to replace.  
+3. `value` (*Depends*): The value to replace.  
+4. `callback` (*Function*): `function (err, numReplaced) {}`. Should be called when replacement completes.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-var obj = {
-		id: 6,
-        x: 'hi',
-        y: 11,
-        z: {
-            z1: 'hello',
-            z2: false,
-            z3: 0
-        }
-    };
-
-db.insert(obj, function (err) {
-    if (err)
-        console.log(err);
-    else {
-        db.replace(obj.id, 'x', 'hello', function (err, numReplaced) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
-                // {
-                //     x: 'hello',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
-
-        db.replace(obj.id, 'z.z2', true, function (err, numReplaced) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
-                // {
-                //     x: 'hi',
-                //     y: 11,
-                //     z: {
-                //         z1: 'hello',
-                //         z2: true,
-                //         z3: 0
-                //     }
-                // }
-            }
-        });
-
-        db.replace(obj.id, 'z.z4', 1, function (err, numReplaced) {
-            // If the path of object does not exist, an error will occur.
-            if (err) {
-                console.log(err);
-                // err equal to [Error: No such property z.z4 to modify.]
-            }
-        });
-
-        // 
-        db.replace(obj.id, 'z', { z11: 'hi', z2: true }, function (err, numReplaced) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(numReplaced);
-                // numReplaced equal to 1
-                // object data in database is equal to 
-                // {
-                //     x: 'hi',
-                //     y: 11,
-                //     z: {
-                //         z11: 'hi',
-                //         z2: true
-                //     }
-                // }
-            }
-        });
-    }
-});
-```
 
 *************************************************
 <a name="API_findAll"></a>  
 ### .findAll(callback)  
 
-Get all the data objects stored in database.
+Get all documents stored in the datastore.  
 
 **Arguments**  
 
-1. `callback` (*Function*): `function (err, docs) { }.` Get called with all data.
+1. `callback` (*Function*): `function (err, docs) { }.` Should be called with all documents.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-db.find(function (err, docs) {
-	if (err) {
-		console.log(err);
-	} else {
-		console.log(docs)
-	}
-});
-```
 
 *************************************************
 <a name="API_find"></a>  
 ### .find(query, callback)  
 
-It is a wrapped function of [find()](https://www.npmjs.com/package/nedb#finding-documents) method of [NeDB](https://www.npmjs.com/package/nedb).
+It is a NeDB [find](https://www.npmjs.com/package/nedb#finding-documents) method, which follows the MongoDB **find** behavior. You should provide this method on your datastore with the same behavior for **objectbox**. (It would be cool if you are using MongoDB as the datastore, you just don't have to implement this method.)  
 
 **Arguments**  
 
-1. `query` (*Object*): The query object.
-2. `callback` (*Function*): `function (err, docs) {}.` Get called when find query docs.
+1. `query` (*Object*): The query object.  
+2. `callback` (*Function*): `function (err, docs) {}.` Should be called when finding docs completes.  
 
 **Returns**  
 
 - (*None*)
-
-**Example**  
-
-```js
-db.find({ system: 'solar' }, function (err, docs) {
-	if (err) {
-		console.log(err);
-	} else {
-		console.log(docs);
-	}
-});
-```

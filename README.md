@@ -35,7 +35,7 @@ An object storage with persistence.
 <a name="Usage"></a>
 ## 3 Basic Usage
 
-**objectbox** exports its functionalities as a constructor (Objectbox Class). To create a box, just new an instance from the Objectbox class with input arguments of `database` and `maxNum`. The parameter `database` is the file path to tell NeDB of where should your data persist. If you like to use your own database, just let `database` be your datastore object. The parameter `maxNum` is optional, you can use it to set the capacity of your box.  
+**objectbox** exports its functionalities as a constructor (Objectbox Class). To create a box, just new an instance from the Objectbox class with input arguments of `database` and `maxNum`. The parameter `database` is the file path to tell NeDB where should your data persist. If you like to use your own database, just let `database` be your datastore object. The parameter `maxNum` is optional, you can use it to set the capacity of your box.  
 
 Instance of the Objectbox class will be denoted as **_box_** in this document, and each object stored in box will be denoted as **_obj_** in this document.  
 
@@ -77,12 +77,12 @@ var Objectbox = require('objectbox'),
 <a name="API_Objectbox"></a>  
 ### new Objectbox([database][, maxNum])  
 
-Create a new instance of Objectbox class.  
+Create a new instance from Objectbox class.  
 
 **Arguments**  
 
-1. `database` (*Object* | *String*): [NeDB](https://www.npmjs.com/package/nedb) is the default datastore, and dafault path is `__dirname + '/database/objectbox.db'` to the file where the data is persisted. You can specify a a new path to store data, or you can also provide your datastore with methods list in [db.md](https://github.com/hedywings/objectbox/blob/master/db.md). 
-2. `maxNum` (*Number*): The maximum capacity of the box. Default is 65536.
+1. `database` (*Object* | *String*): **objectbox** uses [NeDB](https://www.npmjs.com/package/nedb) datastore as its default persistence, set `database` with a file path to tell **objectbox** where you'd like to keep your data. If this parameter is not given, a dafault path `__dirname + '/database/objectbox.db'` will be used. If you like to use your own database, this document [How to use your own database with objectbox](https://github.com/hedywings/objectbox/blob/master/db.md) will give you some hints.  
+2. `maxNum` (*Number*): Capacity of the box, which is the maximum number of objs that this box can store. If not given, a default value 65536 will be used.  
 
 **Returns**  
 
@@ -101,7 +101,7 @@ var box = new Objectbox(boxPath, 1000);
 <a name="API_isEmpty"></a>  
 ### .isEmpty()  
 
-Checks if the box is empty.  
+Checks if this box is empty.  
 
 **Arguments**  
 
@@ -124,7 +124,7 @@ else
 <a name="API_has"></a>  
 ### .has(id)  
 
-Checks if there is an obj with the given id in the box .  
+Checks if there is an obj with the given id in this box .  
 
 **Arguments**  
 
@@ -146,7 +146,7 @@ if (box.has(3)) {
 <a name="API_get"></a>  
 ### .get(id)  
 
-Get an obj from the box with the given id.  
+Get an obj from this box with the given id.  
 
 **Arguments**  
 
