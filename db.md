@@ -9,7 +9,6 @@
 <a name="APIs"></a>
 ## Required methods on your datastore  
 
-* [Db()](#API_Db)
 * [db.insert()](#API_insert)
 * [db.removeById()](#API_removeById)
 * [db.findById()](#API_findById)
@@ -20,27 +19,6 @@
 
 <br />
 
-*************************************************
-[TODO] user should give you a Constructor?  
-
-<a name="API_Db"></a>  
-### new Db(fileName)  
-
-Create a new instance of Db class.
-
-**Arguments**  
-
-1. `fileName` (*String*): Path to the file where the data is persisted.
-
-**Returns**  
-
-- (*Object*): db
-
-**Example**  
-
-```js
-var db = new Db(__dirname + '/database/data.db');
-```
 
 *************************************************
 <a name="API_insert"></a>  
@@ -68,7 +46,7 @@ Remove a document from datastore by the given id.
 **Arguments**  
 
 1. `id` (*Number*): id.  
-2. `callback` (*Function*): `function (err, newDoc) {}`. Should be called when the document is removed from from datastore.  
+2. `callback` (*Function*): `function (err, newDoc) {}`. Should be called when the document is removed from datastore.  
 
 **Returns**  
 
