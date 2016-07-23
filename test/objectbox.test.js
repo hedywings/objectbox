@@ -357,6 +357,14 @@ describe('Functional Check', function () {
         });
     });
 
+    it('update()', function (done) {
+        gadBox.update(1, function () {
+            gadBox.findFromDb({id: 3}, function (err, id) {
+                if (!err) done();
+            });
+        });
+    })
+
     it('removeElement()', function () {
         expect(gadBox.removeElement(10)).to.be.false;
         expect(gadBox.removeElement(5)).to.be.true;
