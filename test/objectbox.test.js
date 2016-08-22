@@ -1,4 +1,4 @@
-var _ = require('lodash'),
+var _ = require('busyman'),
     expect = require('chai').expect,
     fs = require('fs'),
     Db = require('../lib/db'),
@@ -229,18 +229,40 @@ describe('Functional Check', function () {
     });
 
     it('filter()', function () {
+        var result1,
+            result2,
+            result3,
+            result4;
+
+        result1 = gadBox.filter(function (obj) {
+            return obj.extra === null;
+        });
+        expect(result1).to.be.deep.equal([gad1, gad2, gad3]);
+
+        result2 = gadBox.filter(function (obj) {
+            return obj._auxId === 3328;
+        });
+        expect(result2).to.be.deep.equal([gad3]);
+
+        result3 = gadBox.filter(function (obj) {
+            return obj._id === 5;
+        });
+        expect(result3).to.be.deep.equal([]);
+
+        result4 = gadBox.filter(function (obj) {
+            return obj._xxx === 5;
+        });
+        expect(result4).to.be.deep.equal([]);
+
         expect(gadBox.filter('extra', null)).to.be.deep.equal([gad1, gad2, gad3]);
         expect(gadBox.filter('_auxId', 3328)).to.be.deep.equal([gad3]);
         expect(gadBox.filter('_id', 5)).to.be.deep.equal([]);
         expect(gadBox.filter('_xxx', 5)).to.be.deep.equal([]);
+        expect(gadBox.filter('_panel.enabled', false)).to.be.deep.equal([gad1]);
     });
 
     it('find()', function () {
-        expect(gadBox.find({_id: 1})).to.be.deep.equal(gad1);
-        expect(gadBox.find({_dev: { _netcore: 'zigbee-core' }})).to.be.deep.equal(gad2);
-        expect(gadBox.find('_auxId')).to.be.deep.equal(gad1);
         expect(gadBox.find(function(o) { return o._panel.class === 'power'; })).to.be.deep.equal(gad3);
-        expect(gadBox.find({_id: 5})).to.be.undefined;
     });
 
     it('exportAllIds()', function () {
@@ -357,13 +379,22 @@ describe('Functional Check', function () {
         });
     });
 
-    it('update()', function (done) {
-        gadBox.update(1, function () {
-            gadBox.findFromDb({id: 3}, function (err, id) {
-                if (!err) done();
+    it('sync() - with invalid id', function (done) {
+        gadBox.sync(6, function (err) {
+            if (err.message === 'No such obj of id: 6.') done();
+        });
+    });
+
+    it('sync()', function (done) {
+        gadBox.sync(1, function () {
+            gadBox.findFromDb({id: 1}, function (err, docs) {
+                delete docs[0]._id;
+
+                if (_.isEqual(docs[0], gad1.dump())) 
+                    done();
             });
         });
-    })
+    });
 
     it('removeElement()', function () {
         expect(gadBox.removeElement(10)).to.be.false;

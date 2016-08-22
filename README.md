@@ -1,11 +1,13 @@
 # objectbox
-An object storage with persistence.  
+A dictionary to maintain objects with persistence. 
 
 [![NPM](https://nodei.co/npm/objectbox.png?downloads=true)](https://nodei.co/npm/objectbox/)  
 
-[![Travis branch](https://img.shields.io/travis/hedywings/objectbox/master.svg?maxAge=2592000)](https://travis-ci.org/hedywings/objectbox)
+[![Travis branch](https://travis-ci.org/hedywings/objectbox.svg?branch=master)](https://travis-ci.org/hedywings/objectbox)
 [![npm](https://img.shields.io/npm/v/objectbox.svg?maxAge=2592000)](https://www.npmjs.com/package/objectbox)
 [![npm](https://img.shields.io/npm/l/objectbox.svg?maxAge=2592000)](https://www.npmjs.com/package/objectbox)
+
+<br />
 
 ## Table of Contents
 
@@ -56,8 +58,8 @@ var Objectbox = require('objectbox'),
 * [box.isEmpty()](#API_isEmpty)
 * [box.has()](#API_has)
 * [box.get()](#API_get)
-* [box.getMaxNum()](#API_getMaxNum)
 * [box.getCount()](#API_getCount)
+* [box.getMaxNum()](#API_getMaxNum)
 * [box.find()](#API_find)
 * [box.findFromDb()](#API_findFromDb)
 * [box.filter()](#API_filter)
@@ -65,10 +67,11 @@ var Objectbox = require('objectbox'),
 * [box.exportAllObjs()](#API_exportAllObjs)
 * [box.set()](#API_set)
 * [box.add()](#API_add)
-* [box.removeElement()](#API_removeElement)
 * [box.remove()](#API_remove)
+* [box.removeElement()](#API_removeElement)
 * [box.modify()](#API_modify)
 * [box.replace()](#API_replace)
+* [box.sync()](#API_sync)
 * [box.maintain()](#API_maintain)
 
 <br />
@@ -163,27 +166,6 @@ var obj = box.get(5);
 ```
 
 *************************************************
-<a name="API_getMaxNum"></a>  
-### .getMaxNum()  
-
-Get the maximum number of objs that this box can hold.  
-
-**Arguments**  
-
-- (*None*)
-
-**Returns**  
-
-- (*Number*): Maximum number of objs this box can hold.  
-
-**Example**  
-
-```js
-var maxNum = box.getMaxNum();   // 1000
-```
-
-
-*************************************************
 <a name="API_getCount"></a>  
 ### .getCount()  
 
@@ -204,6 +186,26 @@ var count = box.getCount(); // 32
 ```
 
 *************************************************
+<a name="API_getMaxNum"></a>  
+### .getMaxNum()  
+
+Get the maximum number of objs that this box can hold.  
+
+**Arguments**  
+
+- (*None*)
+
+**Returns**  
+
+- (*Number*): Maximum number of objs this box can hold.  
+
+**Example**  
+
+```js
+var maxNum = box.getMaxNum();   // 1000
+```
+
+*************************************************
 <a name="API_find"></a> 
 ### .find(predicate)  
 
@@ -211,7 +213,7 @@ Iterates over objs in this box, and returns the first obj `predicate` returns tr
 
 **Arguments**  
 
-1. `predicate` (*Array* | *Function* | *Object* | *String*): The function invoked per iteration.  
+1. `predicate` (*Function*): The function invoked per iteration.  
 
 **Returns**  
 
@@ -227,16 +229,6 @@ Iterates over objs in this box, and returns the first obj `predicate` returns tr
 box.find(function(obj) {        // returns user1
     return obj.age < 40;
 });
-
-//********************************************************
-// [TODO] busyman doesn't support these styles of finding
-box.find({                      // returns user1
-    age: 36, 
-    active: true
-});    
-box.find([ 'active', false ]);  // returns user2
-box.find('active');             // returns user1
-//********************************************************
 ```
 
 *************************************************
@@ -417,7 +409,6 @@ Store an obj to the box. If `obj` has a synchronous `dump()` method, the box wil
 
 If `obj.dump()` output data or `obj` itself has an property `id`, the box will try to store the `obj` with its intrinsic id. Otherwise, the box will return a new id for this newly stored `obj`.  
    
-
 **Arguments** 
 
 1. `obj` (*Object*): obj to store.  
@@ -445,33 +436,6 @@ obj.add(obj, function (err, id) {
 ```
 
 *************************************************
-<a name="API_removeElement"></a>  
-### .removeElement(id)  
-
-Remove an obj with the specified id from box, but keeps its data in database.  
-
-**Arguments**  
-
-1. `id` (*Number*): id.  
-
-**Returns** 
-
-- (*Boolean*): Returns `true` if successfully removed. Returns `false` if removal fails or there is nothing to be removed (no obj positioned at given `id` in the dictinary).  
-
-**Example**  
-
-```js
-// assume that the following two obj has been stored in the box:
-// obj1 = { a: '1' }, and its id is 60
-
-if (box.removeElement(60))
-    console.log('Removal succeeds.');
-
-if (!box.removeElement(60))
-    console.log('Remove agagin, removal fails.');
-```
-
-*************************************************
 <a name="API_remove"></a>  
 ### .remove(id, callback)  
 
@@ -495,6 +459,33 @@ box.remove(3, function (err) {
     else
         console.log('Removal succeeds.');
 });
+```
+
+*************************************************
+<a name="API_removeElement"></a>  
+### .removeElement(id)  
+
+Remove an obj with the specified id from box, but keeps its data in database.  
+
+**Arguments**  
+
+1. `id` (*Number*): id.  
+
+**Returns** 
+
+- (*Boolean*): Returns `true` if successfully removed. Returns `false` if removal fails or there is nothing to be removed (no obj positioned at given `id` in the dictionary).  
+
+**Example**  
+
+```js
+// assume that the following two obj has been stored in the box:
+// obj1 = { a: '1' }, and its id is 60
+
+if (box.removeElement(60))
+    console.log('Removal succeeds.');
+
+if (!box.removeElement(60))
+    console.log('Remove agagin, removal fails.');
 ```
 
 *************************************************
@@ -536,13 +527,13 @@ box.modify(27, 'x', 'hello', function (err, diffSnippet) {
         //     y: 11,
         //     z: {
         //         z1: 'hello',
-        //         z2: true,
+        //         z2: false,
         //         z3: 0
         //     }
         // }
     }
 
-    box.modify(id, 'z.z2', true, function (err, diffSnippet) {
+    box.modify(27, 'z.z2', true, function (err, diffSnippet) {
         if (err) {
             console.log(err);
         } else {
@@ -550,7 +541,7 @@ box.modify(27, 'x', 'hello', function (err, diffSnippet) {
             // diffSnippet equals to { z: { z2: true }}
             // object data in database is now updated to 
             // {
-            //     x: 'hi',
+            //     x: 'hello',
             //     y: 11,
             //     z: {
             //         z1: 'hello',
@@ -560,7 +551,7 @@ box.modify(27, 'x', 'hello', function (err, diffSnippet) {
             // }
         }
 
-        box.modify(id, 'z.z4', 1, function (err, diffSnippet) {
+        box.modify(27, 'z.z4', 1, function (err, diffSnippet) {
             // If the path of obj does not exist, an error will occur.
             if (err) {
                 console.log(err);
@@ -610,7 +601,7 @@ box.replace(27, 'x', 'hello', function (err, numReplaced) {
         //     y: 11,
         //     z: {
         //         z1: 'hello',
-        //         z2: true,
+        //         z2: false,
         //         z3: 0
         //     }
         // }
@@ -624,7 +615,7 @@ box.replace(27, 'x', 'hello', function (err, numReplaced) {
             // numReplaced equals to 1
             // obj data in database is updated to 
             // {
-            //     x: 'hi',
+            //     x: 'hello',
             //     y: 11,
             //     z: {
             //         z1: 'hello',
@@ -634,15 +625,15 @@ box.replace(27, 'x', 'hello', function (err, numReplaced) {
             // }
         }
 
-        box.replace(id, 'z.z4', 1, function (err, numReplaced) {
+        box.replace(27, 'z.z4', 1, function (err, numReplaced) {
             // If the path of obj does not exist, an error will occur.
             if (err) {
                 console.log(err);
-                // err equal to [Error: No such property z.z4 to modify.]
+                // err equal to [Error: No such property z.z4 to replace.]
             }
         });
 
-        box.replace(id, 'z', { z11: 'hi', z2: true }, function (err, numReplaced) {
+        box.replace(27, 'z', { z11: 'hi', z2: true }, function (err, numReplaced) {
             if (err) {
                 console.log(err);
             } else {
@@ -662,6 +653,33 @@ box.replace(27, 'x', 'hello', function (err, numReplaced) {
     });
 });
 ```
+
+*************************************************
+<a name="API_sync"></a>  
+### .sync(id, callback)
+
+Sync the specified obj between box and database.
+
+**Arguments**  
+
+1. `id` (*Number*): id.  
+2. `callback` (*Function*): `function (err) {}`. Get called when synchronization succeeds.  
+
+**Returns**  
+
+- (*None*)
+
+**Example**  
+
+```js
+box.sync(1, function (err) {
+    if (err)
+        console.log(err); 
+});
+```
+
+<br />
+
 
 *************************************************
 <a name="API_maintain"></a>  

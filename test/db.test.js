@@ -1,4 +1,4 @@
-var _ = require('lodash'),
+var _ = require('busyman'),
     expect = require('chai').expect,
     fs = require('fs'),
     DataStore = require('nedb'),
