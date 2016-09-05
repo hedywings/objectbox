@@ -1,6 +1,6 @@
 {
   "name": "objectbox",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A dictionary to maintain objects with persistence.",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/hedywings/objectbox#readme",
   "dependencies": {
-    "busyman": "^0.2.0",
+    "busyman": "^0.2.1",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
