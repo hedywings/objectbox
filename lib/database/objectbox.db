@@ -1,0 +1,19 @@
+{"$$indexCreated":{"fieldName":"id","unique":true,"sparse":false}}
+{"id":1,"dev":{"id":5,"permAddr":"0x78c5e570737f"},"auxId":10780,"panel":{"enabled":false,"profile":"","class":"TempMeas"},"props":{"name":"gad1","description":"for test"},"attrs":{"temperature":26},"_id":"Tatvh3XNXjeMVYxT"}
+{"id":2,"dev":{"id":8,"permAddr":"0x00124b00043126d1"},"auxId":3,"panel":{"enabled":true,"profile":"HomeAutomation","class":"light"},"props":{"name":"gad2","description":"for test"},"attrs":{"onoff":false},"_id":"Sh2DT48D0yeSQtYX"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{"name":"gad3","description":"for test"},"attrs":{"power":60},"_id":"RPl94HyNoXDEMlP2"}
+{"id":1,"dev":{"id":5,"permAddr":"0x78c5e570737f"},"auxId":10780,"panel":{"enabled":false,"profile":"","class":"TempMeas"},"props":{"name":"gad1","description":"for test"},"attrs":{"temperature":26},"_id":"Tatvh3XNXjeMVYxT"}
+{"id":4,"dev":{"id":27,"permAddr":"192.168.1.0"},"auxId":"/light/0","panel":{"enabled":false,"profile":"sersor","class":"light"},"props":{"name":"gad4","description":"for test"},"attrs":{"onoff":false},"_id":"SggEzomdgIxHDmrp"}
+{"id":5,"dev":{"id":40,"permAddr":"xxxxxxxxxx"},"auxId":"0x1800.0x2a00","panel":{"enabled":false,"profile":"sersor","class":"humidity"},"props":{"name":"gad5","description":"for test"},"attrs":{"sensorValue":60},"_id":"PvqWQOfIUjrVlkKS"}
+{"id":1,"dev":{"id":5,"permAddr":"0x78c5e570737f"},"auxId":500,"panel":{"enabled":false,"profile":"","class":"TempMeas"},"props":{"name":"gad1","description":"for test"},"attrs":{"temperature":26},"_id":"Tatvh3XNXjeMVYxT"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{"name":"gad3","description":"for test"},"attrs":{"power":500},"_id":"RPl94HyNoXDEMlP2"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{"name":"gad33","description":"for test"},"attrs":{"power":500},"_id":"RPl94HyNoXDEMlP2"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{"name":"gad33","description":"hello"},"attrs":{"power":500},"_id":"RPl94HyNoXDEMlP2"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{},"attrs":{"power":500},"_id":"RPl94HyNoXDEMlP2"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{},"attrs":{"power":10},"_id":"RPl94HyNoXDEMlP2"}
+{"id":1,"dev":{"id":5,"permAddr":"0x78c5e570737f"},"auxId":10780,"panel":{"enabled":false,"profile":"","class":"TempMeas"},"props":{"name":"gad1","description":"for test"},"attrs":{"temperature":26},"_id":"Tatvh3XNXjeMVYxT"}
+{"$$deleted":true,"_id":"Tatvh3XNXjeMVYxT"}
+{"$$deleted":true,"_id":"PvqWQOfIUjrVlkKS"}
+{"id":2,"dev":{"id":8,"permAddr":"0x00124b00043126d1"},"auxId":3,"panel":{"enabled":true,"profile":"HomeAutomation","class":"light"},"props":{"name":"gad2","description":"for test"},"attrs":{"onoff":false},"_id":"Sh2DT48D0yeSQtYX"}
+{"id":3,"dev":{"id":13,"permAddr":"0x12345678"},"auxId":3328,"panel":{"enabled":true,"profile":"CommTempSensors","class":"power"},"props":{"name":"gad3","description":"for test"},"attrs":{"power":60},"_id":"RPl94HyNoXDEMlP2"}
+{"id":4,"dev":{"id":27,"permAddr":"192.168.1.0"},"auxId":"/light/0","panel":{"enabled":false,"profile":"sersor","class":"light"},"props":{"name":"gad4","description":"for test"},"attrs":{"onoff":false},"_id":"SggEzomdgIxHDmrp"}
