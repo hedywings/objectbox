@@ -1,6 +1,6 @@
 {
   "name": "objectbox",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "A dictionary to maintain objects with persistence.",
   "main": "index.js",
   "scripts": {
